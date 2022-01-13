@@ -5,15 +5,15 @@ info:
 servers:
   - url: 'localhost:3000'
 paths:
-  /incomes:
+  /incomes/{id}:
     get:
-      summary: 'Sample endpoint: Returns income details'
-      operationId: listIncomes
+      summary: 'Return a income by ID'
+      operationId: getIncome
       tags:
         - income
       parameters:
         - name: id
-          in: query
+          in: path
           description: ID of the income
           required: true
           schema:
@@ -22,32 +22,168 @@ paths:
       responses:
         '200':
           description: 'OK'
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Income'
-        default:
-          description: Unexpected error
+                $ref: '#/components/schemas/IncomeDTO'
+        404:
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ResponseError'
+  /incomes:
+    post:
+      summary: 'Creates a income'
+      operationId: createIncome
+      tags:
+        - income
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateIncomeDTO'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeDTO'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /expense/{id}:
+    get:
+      summary: 'Return a expense by ID'
+      operationId: getExpense
+      tags:
+        - expense
+      parameters:
+        - name: id
+          in: path
+          description: ID of the expense
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseDTO'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+
+  /expense:
+    post:
+      summary: 'Creates a expense'
+      operationId: createExpense
+      tags:
+        - expense
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseDTO'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseDTO'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /account/{id}:
+    get:
+      summary: 'Return a account by ID'
+      operationId: getAccount
+      tags:
+        - account
+      parameters:
+        - name: id
+          in: path
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDTO'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+
+  /account:
+    post:
+      summary: 'Creates a account'
+      operationId: createAccount
+      tags:
+        - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountDTO'
+        required: true
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDTO'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
 components:
   schemas:
-    Income:
+    CreateIncomeDTO:
       type: object
       properties:
-        id:
+        description:
+          type: string
+        receipt_date:
+          type: string
+          format: date
+        expected_receipt_date:
+          type: string
+          format: date
+        id_account:
           type: integer
           format: int64
-        descricao:
+        type_income:
           type: string
-    Error:
+
+    IncomeDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateIncomeDTO'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+
+    ResponseError:
       type: object
       required:
         - code
@@ -56,11 +192,69 @@ components:
         code:
           type: integer
           format: int32
+        status:
+          type: string
         message:
           type: string
+
+    CreateExpenseDTO:
+      type: object
+      properties:
+        value_:
+          type: number
+          format: double
+        payday:
+          type: string
+          format: date
+        expected_payday:
+          type: string
+          format: date
+        type_expense:
+          type: string
+        id_account:
+          type: integer
+          format: int64
+
+    ExpenseDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateExpenseDTO'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+
+    CreateAccountDTO:
+      type: object
+      properties:
+        balance:
+          type: number
+          format: double
+        type_account:
+          type: string
+        financial_institution:
+          type: string
+
+    AccountDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateAccountDTO'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+
+  responses:
+    UnprocessableEntity:
+      description: The server understands the content type of the request entity but was unable to process
+        the conteined instructions.
+
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
+
 security:
   - BasicAuth: []
