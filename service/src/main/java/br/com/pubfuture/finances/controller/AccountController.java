@@ -32,4 +32,9 @@ public class AccountController implements AccountApi {
         return supplyAsync(() -> accountService.createAccount(createAccountDTO), controllerExecutor)
             .thenApply(ResponseEntityUtils::created);
     }
+
+    @Override
+    public CompletableFuture<ResponseEntity<Void>> deleteAccount(Long id) {
+        return runAsync(() -> accountService.deleteAccount(id), controllerExecutor).thenApply(ResponseEntityUtils::noContent);
+    }
 }

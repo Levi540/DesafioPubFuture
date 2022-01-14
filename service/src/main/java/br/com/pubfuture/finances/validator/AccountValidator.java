@@ -12,7 +12,13 @@ public class AccountValidator {
     public void validate(CreateAccountDTO createAccountDTO) {
         var validateErrors = new ValidationErrors();
 
-        validateDoubleRange(createAccountDTO.getBalance(), ACCOUNT_BALANCE, DECIMAL_MIN_VALUE, DECIMAL_MAX_VALUE, validateErrors);
+        validateDoubleRange(
+            createAccountDTO.getBalance(),
+            ACCOUNT_BALANCE,
+            DECIMAL_MIN_VALUE,
+            DECIMAL_MAX_VALUE,
+            validateErrors
+        );
 
         validateRequired(createAccountDTO.getTypeAccount(), ACCOUNT_TYPE_ACCOUNT, validateErrors);
         validateMaxLength(

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>client</artifactId>
+    <artifactId>finances-client</artifactId>
 
     <properties>
         <jsr305.version>3.0.2</jsr305.version>

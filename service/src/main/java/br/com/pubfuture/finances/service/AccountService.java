@@ -25,9 +25,7 @@ public class AccountService {
 
     public AccountDTO getAccount(Long id) {
         requireNonNull(id);
-        Account account = accountRepository
-            .findById(id)
-            .orElseThrow(() -> new AccountNotFoundException("Account not found: " + id));
+        Account account = getAccountOrThrow(id);
 
         return accountMapper.fromEntityToDto(account);
     }
@@ -37,5 +35,16 @@ public class AccountService {
         var account = accountMapper.fromCreateAccountDtoToEntity(createAccountDTO);
         accountRepository.save(account);
         return accountMapper.fromEntityToDto(account);
+    }
+
+    public void deleteAccount(Long accountId) {
+        accountRepository.delete(getAccountOrThrow(accountId));
+    }
+
+    private Account getAccountOrThrow(Long accountId) {
+        requireNonNull(accountId);
+        return accountRepository
+            .findById(accountId)
+            .orElseThrow(() -> new AccountNotFoundException("Account not found: " + accountId));
     }
 }

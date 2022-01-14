@@ -32,4 +32,9 @@ public class ExpenseController implements ExpenseApi {
         return supplyAsync(() -> expenseService.createExpense(createExpenseDTO), controllerExecutor)
             .thenApply(ResponseEntityUtils::created);
     }
+
+    @Override
+    public CompletableFuture<ResponseEntity<Void>> deleteExpense(Long id) {
+        return runAsync(() -> expenseService.deleteExpense(id), controllerExecutor).thenApply(ResponseEntityUtils::noContent);
+    }
 }

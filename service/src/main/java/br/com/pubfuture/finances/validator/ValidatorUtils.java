@@ -67,7 +67,13 @@ public final class ValidatorUtils {
         return true;
     }
 
-    public static boolean validateDoubleRange(Double field, String fieldName, Double minValue, Double maxValue, ValidationErrors validationErrors) {
+    public static boolean validateDoubleRange(
+        Double field,
+        String fieldName,
+        Double minValue,
+        Double maxValue,
+        ValidationErrors validationErrors
+    ) {
         if (!isNull(field) && !DoubleValidator.getInstance().isInRange(field, minValue, maxValue)) {
             validationErrors.add(fieldName, fieldName + EXCEEDS_DOUBLE_RANGE);
             return false;

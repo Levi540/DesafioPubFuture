@@ -28,10 +28,53 @@ paths:
                 $ref: '#/components/schemas/IncomeDTO'
         404:
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseError'
+
+    delete:
+      summary: 'Deletes a income by ID'
+      operationId: deleteIncome
+      tags:
+        - income
+      parameters:
+        - name: id
+          in: path
+          description: ID of the income
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 'Deleted successfully'
+        404:
+          description: Not Found
+
+    put:
+      summary: 'Updates a income by ID'
+      operationId: updateIncome
+      tags:
+        - income
+      parameters:
+        - name: id
+          in: path
+          description: ID of the income
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIncomeDTO'
+        #requered: true
+      responses:
+        '204':
+          description: 'Deleted successfully'
+        404:
+          description: Not Found
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /incomes:
     post:
       summary: 'Creates a income'
@@ -40,9 +83,9 @@ paths:
         - income
       requestBody:
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateIncomeDTO'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIncomeDTO'
         required: true
       responses:
         201:
@@ -53,6 +96,50 @@ paths:
                 $ref: '#/components/schemas/IncomeDTO'
         422:
           $ref: '#/components/responses/UnprocessableEntity'
+
+    get:
+      summary: 'Income list'
+      operationId: listIncomes
+      tags:
+        - income
+      parameters:
+        - name: description
+          in: query
+          description: Description of the income
+          schema:
+            type: string
+        - name: start_at
+          in: query
+          description: Start date
+          schema:
+            type: string
+            format: date
+        - name: end_at
+          in: query
+          description: End date
+          schema:
+            type: string
+            format: date
+        - name: id_account
+          in: query
+          description: Id account
+          schema:
+            type: integer
+            format: int64
+        - name: type_income
+          in: query
+          description: Type income
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IncomeDTO'
 
   /expense/{id}:
     get:
@@ -77,10 +164,25 @@ paths:
                 $ref: '#/components/schemas/ExpenseDTO'
         404:
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseError'
+
+    delete:
+      summary: 'Deletes a expense by ID'
+      operationId: deleteExpense
+      tags:
+        - expense
+      parameters:
+        - name: id
+          in: path
+          description: ID of the expense
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 'Deleted successfully'
+        404:
+          description: Not Found
 
   /expense:
     post:
@@ -132,6 +234,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseError'
 
+    delete:
+      summary: 'Deletes a account by ID'
+      operationId: deleteAccount
+      tags:
+        - account
+      parameters:
+        - name: id
+          in: path
+          description: ID of the account
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: 'Deleted successfully'
+        404:
+          description: Not Found
+
   /account:
     post:
       summary: 'Creates a account'
@@ -156,7 +277,7 @@ paths:
 
 components:
   schemas:
-    CreateIncomeDTO:
+    UpdateIncomeDTO:
       type: object
       properties:
         description:
@@ -172,6 +293,11 @@ components:
           format: int64
         type_income:
           type: string
+
+    CreateIncomeDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateIncomeDTO'
 
     IncomeDTO:
       type: object

@@ -1,5 +1,6 @@
 package br.com.pubfuture.finances.domain.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
@@ -15,10 +16,10 @@ public class Income {
     private String description;
 
     @Column(name = "receipt_date", nullable = false)
-    private String receiptDate;
+    private LocalDate receiptDate;
 
     @Column(name = "expected_receipt_date", nullable = false)
-    private String expectedReceiptDate;
+    private LocalDate expectedReceiptDate;
 
     @Column(name = "id_account", nullable = false)
     private Long idAccount;
@@ -31,8 +32,8 @@ public class Income {
     private Income(
         Long id,
         String description,
-        String receiptDate,
-        String expectedReceiptDate,
+        LocalDate receiptDate,
+        LocalDate expectedReceiptDate,
         Long idAccount,
         String typeIncome
     ) {
@@ -52,11 +53,11 @@ public class Income {
         return description;
     }
 
-    public String getReceiptDate() {
+    public LocalDate getReceiptDate() {
         return receiptDate;
     }
 
-    public String getExpectedReceiptDate() {
+    public LocalDate getExpectedReceiptDate() {
         return expectedReceiptDate;
     }
 
@@ -116,8 +117,8 @@ public class Income {
     public static final class Builder {
         private Long id;
         private String description;
-        private String receiptDate;
-        private String expectedReceiptDate;
+        private LocalDate receiptDate;
+        private LocalDate expectedReceiptDate;
         private Long idAccount;
         private String typeIncome;
 
@@ -133,12 +134,12 @@ public class Income {
             return this;
         }
 
-        public Builder receiptDate(String receiptDate) {
+        public Builder receiptDate(LocalDate receiptDate) {
             this.receiptDate = receiptDate;
             return this;
         }
 
-        public Builder expectedReceiptDate(String expectedReceiptDate) {
+        public Builder expectedReceiptDate(LocalDate expectedReceiptDate) {
             this.expectedReceiptDate = expectedReceiptDate;
             return this;
         }

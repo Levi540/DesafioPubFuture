@@ -25,9 +25,7 @@ public class ExpenseService {
 
     public ExpenseDTO getExpense(Long id) {
         requireNonNull(id);
-        Expense expense = expenseRepository
-            .findById(id)
-            .orElseThrow(() -> new ExpenseNotFoundException("Expense not found: " + id));
+        Expense expense = getExpenseOrThrow(id);
 
         return expenseMapper.fromEntityToDto(expense);
     }
@@ -37,5 +35,16 @@ public class ExpenseService {
         var expense = expenseMapper.fromCreateExpenseDtoToEntity(createExpenseDTO);
         expenseRepository.save(expense);
         return expenseMapper.fromEntityToDto(expense);
+    }
+
+    public void deleteExpense(Long expenseId) {
+        expenseRepository.delete(getExpenseOrThrow(expenseId));
+    }
+
+    private Expense getExpenseOrThrow(Long expenseId) {
+        requireNonNull(expenseId);
+        return expenseRepository
+            .findById(expenseId)
+            .orElseThrow(() -> new ExpenseNotFoundException("Expense not found: " + expenseId));
     }
 }
