@@ -4,5 +4,5 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: finances-db.ca1ldpao6xix.us-east-1.rds.amazonaws.com:3306/finances?&serverTimezone=UTC&useSSL=false
+    url: -------------?&serverTimezone=UTC&useSSL=false
     username: admin
